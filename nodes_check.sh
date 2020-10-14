@@ -1,7 +1,8 @@
 #!/bin/bash
 
-if [ $1 ]; then 
+if [ $1 ] && [ $2 ]; then 
 	PREFIX=$1 
+	KEY=$2
 else 
 	echo "Please enter the prefix of the nodes!" 
 	echo "e.g. ./node_check.sh repro" 
@@ -11,14 +12,13 @@ fi
 SCRIPT="ls; docker version"
 M_NODES=$(twccli ls vcs | grep "$PREFIX-control"  | awk '{print $8}')
 W_NODES=$(twccli ls vcs | grep "$PREFIX-k8s"  | awk '{print $8}')
-KEY="repro1key.pem"
 
 echo "Start to connect to master nodes..." 
 for node in ${M_NODES}; do
 	echo "=============================="
 	echo "|   ubuntu@${node}   |"
 	echo "=============================="
-	ssh -i ${KEY} -o StrictHostkeyChecking=no ubuntu@$node "${SCRIPT}"
+	ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$node "${SCRIPT}"
 done
 
 echo "Start to connect to worker nodes..." 
@@ -26,7 +26,7 @@ for node in ${W_NODES}; do
 	echo "=============================="
 	echo "|   ubuntu@${node}   |"
 	echo "=============================="
-	ssh -i ${KEY} -o StrictHostkeyChecking=no ubuntu@$node "${SCRIPT}"
+	ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$node "${SCRIPT}"
 done
 
 echo "================================"

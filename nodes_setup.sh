@@ -1,10 +1,11 @@
 #!/bin/bash
 
-if [ $1 ]; then 
+if [ $1 ] && [ $2 ]; then 
 	PREFIX=$1 
+	KEY=$2
 else 
-	echo "Please enter the prefix of the nodes!" 
-	echo "e.g. ./node_setup.sh repro" 
+	echo "Please enter the prefix and key of the cluster!" 
+	echo "e.g. bash node_setup.sh hank hankskey " 
 	exit 1 
 fi 
 
@@ -17,18 +18,17 @@ sudo bash openstack-k8s-workernode.sh;
 sudo chown -R ubuntu:ubuntu .docker .vim .viminfo"
 M_NODES=$(twccli ls vcs | grep "$PREFIX-control"  | awk '{print $8}')
 W_NODES=$(twccli ls vcs | grep "$PREFIX-k8s"  | awk '{print $8}')
-KEY="repro1key.pem"
 
 echo "Start to connect to master nodes..." 
 for node in ${M_NODES}; do
 	#echo "ssh to ubuntu@${node}"
-	ssh -i ${KEY} -o StrictHostkeyChecking=no ubuntu@$node "${M_SCRIPT}"
+	ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$node "${M_SCRIPT}"
 done
 
 echo "Start to connect to worker nodes..." 
 for node in ${W_NODES}; do
 	#echo "ssh to ubuntu@${node}"
-	ssh -i ${KEY} -o StrictHostkeyChecking=no ubuntu@$node "${W_SCRIPT}"
+	ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$node "${W_SCRIPT}"
 done
 
 echo "================================"
