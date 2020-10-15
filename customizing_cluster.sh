@@ -96,7 +96,7 @@ network:
   plugin: canal
 authentication:
   strategy: x509
-ssh_key_path: "~/.ssh/onap-key"
+ssh_key_path: "~/.ssh/${KEY}"
 ssh_agent_auth: false
 authorization:
   mode: rbac
