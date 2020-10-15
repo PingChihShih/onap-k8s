@@ -70,7 +70,7 @@ echo ""
 echo -n "Continue to Create cluster.yaml? (y/n): "
 read B_CONTINUE2
 
-if [ $B_CONTINUE2 != 'y' ]; then
-	echo "Okay, Bye!"
-	exit 1
-fi
+# if [ $B_CONTINUE2 != 'y' ]; then
+# 	echo "Okay, Bye!"
+# 	exit 1
+# fi

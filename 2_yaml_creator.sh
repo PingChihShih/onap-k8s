@@ -30,7 +30,7 @@ echo "nodes:" > ${TARGET}
 
 COUNT=1
 for fip in ${M_NODES}; do
-	ssh -i ${KEY} -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
+	ssh -i ${KEY}.pem -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
 	while IFS='' read -r line || [[ -n "$line" ]]; do
         	# echo "% ${line[0]}"
         	initial="$(echo $line | head -c 5)"
@@ -58,7 +58,7 @@ done
 
 COUNT=1
 for fip in ${W_NODES}; do
-	ssh -i ${KEY} -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
+	ssh -i ${KEY}.pem -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
 	while IFS='' read -r line || [[ -n "$line" ]]; do
         	# echo "% ${line[0]}"
         	initial="$(echo $line | head -c 5)"
