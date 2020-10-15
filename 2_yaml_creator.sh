@@ -49,7 +49,7 @@ for fip in ${M_NODES}; do
   - etcd
   hostname_override: "${PREFIX}-control-$COUNT"
   user: ubuntu
-  ssh_key_path: "~/.ssh/${KEY}"
+  ssh_key_path: "~/.ssh/${KEY}.pem"
 EOF
 COUNT=$(($COUNT+1))
 done
@@ -76,7 +76,7 @@ for fip in ${W_NODES}; do
   - worker
   hostname_override: "${PREFIX}-k8s-$COUNT"
   user: ubuntu
-  ssh_key_path: "~/.ssh/${KEY}"
+  ssh_key_path: "~/.ssh/${KEY}.pem"
 EOF
 COUNT=$(($COUNT+1))
 done
@@ -100,7 +100,7 @@ network:
   plugin: canal
 authentication:
   strategy: x509
-ssh_key_path: "~/.ssh/$KEY"
+ssh_key_path: "~/.ssh/${KEY}.pem"
 ssh_agent_auth: false
 authorization:
   mode: rbac
