@@ -1,13 +1,17 @@
 #!/bin/bash
 
-if [ $1 ] && [ $2 ]; then 
-	PREFIX=$1 
-	KEY=$2
-else 
-	echo "Please enter the prefix of the nodes!" 
-	echo "e.g. ./node_check.sh repro" 
-	exit 1 
-fi 
+if [ $2 ]; then
+  PREFIX=$1
+  KEY=$2
+else
+  echo "Please Enter Some Necessary Info for Setting Cluster!"
+
+  echo -n "Node Prefix: "
+  read PREFIX
+
+  echo -n "Key Name(w/o .pem): "
+  read KEY
+fi
 
 SCRIPT="ls; docker version"
 M_NODES=$(twccli ls vcs | grep "$PREFIX-control"  | awk '{print $8}')
