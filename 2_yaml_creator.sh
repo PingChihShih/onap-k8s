@@ -1,19 +1,23 @@
 #!/bin/bash
 
-if [ $1 ] && [ $2 ]; then
+if [ $2 ]; then
   PREFIX=$1
   KEY=$2
-else 
-	echo "Please enter the prefix of the nodes!" 
-	echo "e.g. bash customizing_cluster.sh repro" 
-	exit 1 
-fi 
+else
+  echo "Please Enter Some Necessary Info for Creating cluster.yml!"
+
+  echo -n "Node Prefix: "
+  read PREFIX
+
+  echo -n "Key Name(w/o .pem): "
+  read KEY
+fi
+
 TMP=.tmp.temp
 TARGET=cluster.yml
 SCRIPT="ifconfig"
 M_NODES=$(twccli ls vcs | grep "$PREFIX-control"  | awk '{print $8}')
 W_NODES=$(twccli ls vcs | grep "$PREFIX-k8s"  | awk '{print $8}')
-KEY="repro1key.pem"
 FLAG="StrictHostkeyChecking=no"
 
 # ==========================
@@ -96,7 +100,7 @@ network:
   plugin: canal
 authentication:
   strategy: x509
-ssh_key_path: "~/.ssh/onap-key"
+ssh_key_path: "~/.ssh/$KEY"
 ssh_agent_auth: false
 authorization:
   mode: rbac
