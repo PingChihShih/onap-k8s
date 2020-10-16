@@ -26,7 +26,7 @@ chmod +x openstack-nfs-server.sh;
 chmod +x master_nfs_node.sh;
 sudo ./openstack-nfs-server.sh; 
 sudo rm /etc/exports;
-touch /etc/expotrs;
+touch /etc/exports;
 sudo ./master_nfs_node.sh $SLAVE_LIST"
 SLAVE_SCRIPT="rm slave_nfs_node.sh;
 wget https://raw.githubusercontent.com/onap/oom/master/docs/slave_nfs_node.sh; 
