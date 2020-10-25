@@ -67,8 +67,9 @@ echo "============"
 echo "| Success! |"
 echo "============"
 echo ""
-echo -n "Continue to Create cluster.yaml? (y/n): "
-read B_CONTINUE2
+
+# echo -n "Continue to Create cluster.yaml? (y/n): "
+# read B_CONTINUE2
 
 # if [ $B_CONTINUE2 != 'y' ]; then
 # 	echo "Okay, Bye!"
