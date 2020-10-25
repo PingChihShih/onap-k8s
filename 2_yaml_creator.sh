@@ -13,6 +13,13 @@ else
   read KEY
 fi
 
+echo -n "Is your key in ~/.ssh?(y/n): "
+read IN_SSH
+if [ $IN_SSH != 'y' ]; then
+	echo "Please put your key in ~/.ssh then try again."
+	exit 1
+fi
+
 TMP=.tmp.temp
 TARGET=cluster.yml
 SCRIPT="ifconfig"
@@ -30,7 +37,7 @@ echo "nodes:" > ${TARGET}
 
 COUNT=1
 for fip in ${M_NODES}; do
-	ssh -i ${KEY}.pem -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
+	ssh -i ~/.ssh/${KEY}.pem -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
 	while IFS='' read -r line || [[ -n "$line" ]]; do
         	# echo "% ${line[0]}"
         	initial="$(echo $line | head -c 5)"
@@ -58,7 +65,7 @@ done
 
 COUNT=1
 for fip in ${W_NODES}; do
-	ssh -i ${KEY}.pem -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
+	ssh -i ~/.ssh/${KEY}.pem -o ${FLAG} ubuntu@${fip} ${SCRIPT} > ${TMP}
 	while IFS='' read -r line || [[ -n "$line" ]]; do
         	# echo "% ${line[0]}"
         	initial="$(echo $line | head -c 5)"
