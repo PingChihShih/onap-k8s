@@ -1,0 +1,56 @@
+#!/bin/bash
+# NDHC means Node Disk Health Check
+
+PREFIX="repro"
+KEY=".ssh/danielshihkey"
+
+if [ $1 ]; then 
+	if [ $1 == 'd' ]; then
+		echo "Now using the default setting for dcluster:"
+	elif [ $1 == 'c' ]; then
+		echo "Now using the default setting for ccluster:"
+		PREFIX="onap"
+		KEY=".ssh/chrislinkey"
+	fi
+	echo "PREFIX: $PREFIX"
+	echo "KEY: $KEY"
+else
+	echo "Please Enter Some Necessary Info for Setting Cluster!"
+
+	echo -n "Node Prefix: "
+	read PREFIX
+  
+	echo -n "Is the key in ~/.ssh?(y/n): "
+	read ANS
+	if [ ANS == "y" ]; then
+  		echo -n "Key Name(w/o .pem): "
+  		read KEY
+  	else
+		echo -n "Please enter the complete key path(but w/o .pem): "
+	fi
+fi
+
+#SCRIPT="df -h | grep -E -- 'nfs|/dev/vda1'" 
+SCRIPT="df -h / | grep -- '/dev/vda1' | grep 97G"
+M_NODES=$(twccli ls vcs | grep "$PREFIX-control"  | awk '{print $8}')
+W_NODES=$(twccli ls vcs | grep "$PREFIX-k8s"  | awk '{print $8}')
+COUNT=0
+
+for node in ${M_NODES}; do
+	(( COUNT++ ))
+	echo -n "$PREFIX-control-$COUNT: "
+	ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$node "${SCRIPT}"
+done
+
+COUNT=0
+for node in ${W_NODES}; do
+	(( COUNT++ ))
+	echo -n "$PREFIX-k8s-$COUNT: "
+	ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$node "${SCRIPT}"
+done
+
+NODE3=$(twccli ls vcs | grep "$PREFIX-k8s-3"  | awk '{print $8}')
+echo -n "NFS(k8s-3): "
+ssh -i ${KEY}.pem -o StrictHostkeyChecking=no ubuntu@$NODE3 "df -h | grep nfs"
+
+
